@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using Colossus.Web;
 using Sitecore.Analytics;
 using Sitecore.Analytics.Data;
-using Sitecore.Analytics.Outcome.Extensions;
+//using Sitecore.Analytics.Outcome.Extensions;
 using Sitecore.Analytics.Tracking;
 using Sitecore.ExperienceAnalytics.Aggregation.Dimensions;
 

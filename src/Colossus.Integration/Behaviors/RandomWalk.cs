@@ -27,75 +27,75 @@
           var outcomes = visitContext.Visit.GetVariable<IEnumerable<TriggerOutcomeData>>("TriggerOutcomes");
           visitContext.Visit.Variables.Remove("TriggerOutcomes");
 
-          pause = visitContext.Visit.GetVariable<double>("Pause");
+          //pause = visitContext.Visit.GetVariable<double>("Pause");
 
-          var landingPage = visitContext.Visit.GetVariable<string>("LandingPage");
-          if (string.IsNullOrEmpty(landingPage))
-          {
-            throw new Exception("Expected LandingPage");
-          }
+          //var landingPage = visitContext.Visit.GetVariable<string>("LandingPage");
+          //if (string.IsNullOrEmpty(landingPage))
+          //{
+          //  throw new Exception("Expected LandingPage");
+          //}
 
-          var history = new List<string>();
-          var response = visitContext.Request(landingPage);
-          history.Add(landingPage);
+          //var history = new List<string>();
+          //var response = visitContext.Request(landingPage);
+          //history.Add(landingPage);
 
-          var pageViews = (int)visitContext.Visit.GetVariable<double>("PageViews") - 1;
+          //var pageViews = (int)visitContext.Visit.GetVariable<double>("PageViews") - 1;
 
-          if (visitContext.Visit.GetVariable("Bounce", false))
-          {
-            pageViews = 1;
-          }
-
-
-          var internalSearchIndex = Randomness.Random.Next(0, pageViews);
-
-          for (var j = 0; j < pageViews; j++)
-          {
-            var nextUrl = this.GetNextUrl(response);
-            if (string.IsNullOrEmpty(nextUrl))
-            {
-              nextUrl = history.Count > 1 ? history[history.Count - 2] : history[0];
-            }
-            else
-            {
-              history.Add(nextUrl);
-            }
+          //if (visitContext.Visit.GetVariable("Bounce", false))
+          //{
+          //  pageViews = 1;
+          //}
 
 
-            //Add outcomes to last visit
-            var variables = new Dictionary<string, object>();
-            if (j == pageViews - 1 && outcomes != null)
-            {
-              foreach (var oc in outcomes)
-              {
-                oc.DateTime = visitContext.Visit.End;
-              }
-              variables.Add("TriggerOutcomes", outcomes);
-            }
+          //var internalSearchIndex = Randomness.Random.Next(0, pageViews);
 
-            var events = new List<TriggerEventData>();
-            if (j == internalSearchIndex)
-            {
-              var internalKeywords = visitContext.Visit.GetVariable<string>("InternalSearch");
-              if (!string.IsNullOrEmpty(internalKeywords))
-              {
-                events.Add(new TriggerEventData
-                {
-                  Name = "Local search",
-                  Id = AnalyticsIds.SearchEvent.ToGuid(),
-                  Text = internalKeywords
-                });
-              }
-            }
+          //for (var j = 0; j < pageViews; j++)
+          //{
+          //  var nextUrl = this.GetNextUrl(response);
+          //  if (string.IsNullOrEmpty(nextUrl))
+          //  {
+          //    nextUrl = history.Count > 1 ? history[history.Count - 2] : history[0];
+          //  }
+          //  else
+          //  {
+          //    history.Add(nextUrl);
+          //  }
 
 
-            if (events.Count > 0)
-            {
-              variables.Add("TriggerEvents", events);
-            }
+          //  //Add outcomes to last visit
+          //  var variables = new Dictionary<string, object>();
+          //  if (j == pageViews - 1 && outcomes != null)
+          //  {
+          //    foreach (var oc in outcomes)
+          //    {
+          //      oc.DateTime = visitContext.Visit.End;
+          //    }
+          //    variables.Add("TriggerOutcomes", outcomes);
+          //  }
 
-            response = visitContext.Request(nextUrl, variables: variables);
-          }
+          //  var events = new List<TriggerEventData>();
+          //  if (j == internalSearchIndex)
+          //  {
+          //    var internalKeywords = visitContext.Visit.GetVariable<string>("InternalSearch");
+          //    if (!string.IsNullOrEmpty(internalKeywords))
+          //    {
+          //      events.Add(new TriggerEventData
+          //      {
+          //        Name = "Local search",
+          //        Id = AnalyticsIds.SearchEvent.ToGuid(),
+          //        Text = internalKeywords
+          //      });
+          //    }
+          //  }
+
+
+          //  if (events.Count > 0)
+          //  {
+          //    variables.Add("TriggerEvents", events);
+          //  }
+
+          //  response = visitContext.Request(nextUrl, variables: variables);
+          //}
 
           yield return visitContext.Visit;
         }

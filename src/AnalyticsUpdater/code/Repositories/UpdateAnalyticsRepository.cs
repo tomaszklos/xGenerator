@@ -2,13 +2,10 @@
 using System.Configuration;
 using System.Linq;
 using System.Threading;
-using MongoDB.Bson;
-using MongoDB.Driver;
 using Sitecore;
 using Sitecore.Analytics;
 using Sitecore.Analytics.Data.DataAccess.MongoDb;
 using Sitecore.Analytics.Model;
-using Sitecore.Analytics.Processing.ProcessingPool;
 using Sitecore.Configuration;
 using Sitecore.ContentSearch;
 using Sitecore.Data;
@@ -103,12 +100,12 @@ namespace AnalyticsUpdater.Repositories
 
         private void MoveMongoDate(int days)
         {
-            var refreshAnalyticsQuery = _masterDb.GetItem(new ID("{AD488697-75A8-4245-B391-BD1809D5BF58}"));
-            var scriptTxt = refreshAnalyticsQuery.Fields["Query"].Value;
-            var connectionStringName = refreshAnalyticsQuery.Fields["Data Source"].Value;
-            var item = ConfigurationManager.ConnectionStrings[connectionStringName];
-            var driver = new UpdateAnalyticsVisitsRepository.JsMongoDbDriver(item.ConnectionString);
-            driver.Eval(scriptTxt, days);
+            //var refreshAnalyticsQuery = _masterDb.GetItem(new ID("{AD488697-75A8-4245-B391-BD1809D5BF58}"));
+            //var scriptTxt = refreshAnalyticsQuery.Fields["Query"].Value;
+            //var connectionStringName = refreshAnalyticsQuery.Fields["Data Source"].Value;
+            //var item = ConfigurationManager.ConnectionStrings[connectionStringName];
+            //var driver = new UpdateAnalyticsVisitsRepository.JsMongoDbDriver(item.ConnectionString);
+            //driver.Eval(scriptTxt, days);
         }
 
         private void UpdateLastRefreshDate()
@@ -173,10 +170,10 @@ namespace AnalyticsUpdater.Repositories
             {
             }
 
-            public BsonValue Eval(BsonJavaScript code, params object[] args)
-            {
-                return Database.Eval(EvalFlags.None, code, args);
-            }
+            //public BsonValue Eval(BsonJavaScript code, params object[] args)
+            //{
+            //    return Database.Eval(EvalFlags.None, code, args);
+            //}
         }
     }
 }

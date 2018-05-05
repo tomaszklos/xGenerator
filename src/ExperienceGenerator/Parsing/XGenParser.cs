@@ -23,6 +23,34 @@ namespace ExperienceGenerator.Parsing
         public ItemInfoClient InfoClient { get; set; }
         private readonly GeoDataRepository _geoDataRepository;
 
+        public Dictionary<string, double> Channels
+        {
+            get { return _channels; }
+        }
+        public static Dictionary<string, double> _channels
+        {
+            get;
+            set;
+        }
+        public Dictionary<string, double> Outcomes
+        {
+            get { return _outcomes; }
+        }
+        public static Dictionary<string, double> _outcomes
+        {
+            get;
+            set;
+        }
+        public List<City> Cities
+        {
+            get { return _cities; }
+        }
+        public static List<City> _cities
+        {
+            get;
+            set;
+        }
+
         static XGenParser()
         {
             Factories = new Dictionary<string, VariableFactory>
@@ -65,6 +93,8 @@ namespace ExperienceGenerator.Parsing
                                                                {
                                                                    var channelPct = token.Value<double?>("Percentage") ?? 1;
                                                                    var channels = parser.ParseWeightedSet<string>(token["Weights"]);
+                                                                   _channels = parser.ParseChannels<string>(token["Weights"]);
+
                                                                    segment.VisitVariables.AddOrReplace(Variables.Random("Channel", () => Randomness.Random.NextDouble() < channelPct ? channels() : null, true));
                                                                })},
                             {"Referrer", VariableFactory.Lambda((segment, token, parser) => segment.VisitVariables.AddOrReplace(Variables.Random("Referrer", parser.ParseWeightedSet<string>(token), true)))},
@@ -72,6 +102,7 @@ namespace ExperienceGenerator.Parsing
                                                            {
                                                                var regionId = parser.ParseWeightedSet<string>(token["Region"]);
                                                                segment.VisitorVariables.AddOrReplace(new GeoVariables(() => new GetRandomCityService().GetRandomCity(regionId())));
+                                                               _cities = new GetRandomCityService().GetCities(regionId());
                                                            })},
                             {"Devices", VariableFactory.Lambda((segment, token, parser) =>
                                                                {
@@ -90,6 +121,7 @@ namespace ExperienceGenerator.Parsing
                             {"Outcomes", VariableFactory.Lambda((segment, token, parser) =>
                                                                 {
                                                                     var value = new NormalGenerator(10, 5).Truncate(1);
+                                                                    _outcomes = parser.ParseData<string>(token);
                                                                     segment.VisitVariables.AddOrReplace(new OutcomeVariable(parser.ParseSet<string>(token), value.Next));
                                                                 })},
                             {"InternalSearch", VariableFactory.Lambda((segment, token, parser) =>
@@ -338,6 +370,50 @@ namespace ExperienceGenerator.Parsing
                    };
         }
 
+        public Dictionary<string, double> ParseData<TValue>(JToken token)
+        {
+            var result = new Dictionary<string, double>();
+
+            if (token == null || !token.Any())
+            {
+                return new Dictionary<string, double>();
+            }
+            var set = (JObject)token;
+            var converter = TypeDescriptor.GetConverter(typeof(TValue));
+
+            var builder = new WeightedSetBuilder<TValue>();
+            foreach (var kv in set)
+            {
+                var weight = kv.Value.Value<double>();
+                if (weight > 0)
+                {
+                    result.Add(kv.Key, weight);
+                }
+            }
+            return result;
+        }
+        public Dictionary<string, double> ParseChannels<TValue>(JToken token)
+        {
+            var result = new Dictionary<string, double>();
+
+            if (token == null || !token.Any())
+            {
+                return new Dictionary<string, double>();
+            }
+            var set = (JObject)token;
+            var converter = TypeDescriptor.GetConverter(typeof(TValue));
+
+            var builder = new WeightedSetBuilder<TValue>();
+            foreach (var kv in set)
+            {
+                var weight = kv.Value.Value<double>();
+                if (weight > 0)
+                {
+                    result.Add(kv.Key, weight);
+                }
+            }
+            return result;
+        }
         public Func<TValue> ParseWeightedSet<TValue>(JToken token)
         {
             if (token == null || !token.Any())

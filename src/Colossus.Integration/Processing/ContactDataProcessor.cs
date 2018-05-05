@@ -8,11 +8,12 @@
   using Sitecore.Analytics.Tracking;
   using Sitecore.Data.Items;
 
-  public class ContactDataProcessor : ISessionPatcher
+
+    public class ContactDataProcessor : ISessionPatcher
   {
     public void UpdateSession(Session session, RequestInfo requestInfo)
     {
-      requestInfo.SetIfVariablePresent("ContactId", session.Identify);
+      //requestInfo.SetIfVariablePresent("ContactId", session.Identify);
 
       UpdatePersonalInformation(session, requestInfo);
 

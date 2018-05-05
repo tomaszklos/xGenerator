@@ -24,6 +24,6 @@ namespace Colossus.Web
             info.Visitor = VisitorInfo.FromVisitor(request.Visit.Visitor);
 
             return info;
-        }       
+        }
     }
 }

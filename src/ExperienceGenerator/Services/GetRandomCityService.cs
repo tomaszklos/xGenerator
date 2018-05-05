@@ -33,5 +33,15 @@ namespace ExperienceGenerator.Services
                                            }
                                        })();
         }
+
+        public List<City> GetCities([NotNull] string subcontinentCode)
+        {
+            if (subcontinentCode == null)
+                throw new ArgumentNullException(nameof(subcontinentCode));
+
+            var cities = _geoDataRepository.Cities.Where(c => c.Country.SubcontinentCode == subcontinentCode);
+
+            return cities.ToList();
+        }
     }
 }

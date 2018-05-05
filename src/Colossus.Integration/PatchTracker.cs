@@ -17,10 +17,10 @@ namespace Colossus.Integration
             Patchers = new List<ISessionPatcher>();
 
             //TODO: Add to config
-            Patchers.Add(new ChannelPatcher());
-            Patchers.Add(new GeoPatcher());
-            Patchers.Add(new TimePatcher());
-            Patchers.Add(new ContactDataProcessor());
+            //Patchers.Add(new ChannelPatcher());
+            //Patchers.Add(new GeoPatcher());
+            //Patchers.Add(new TimePatcher());
+            //Patchers.Add(new ContactDataProcessor());
         }
 
         public void AddPatcher(ISessionPatcher patcher)
@@ -30,34 +30,34 @@ namespace Colossus.Integration
 
         public override void Process(InitializeTrackerArgs args)
         {
-            if (Tracker.Current == null || !Tracker.IsActive)
-            {
-                return;
-            }
+            //if (Tracker.Current == null || !Tracker.IsActive)
+            //{
+            //    return;
+            //}
 
-            try
-            {
-                var requestInfo = HttpContext.Current.ColossusInfo();
-                if (requestInfo == null)
-                {
-                    if (PatchExmRequestTime(args)) return;
-                }
+            //try
+            //{
+            //    var requestInfo = HttpContext.Current.ColossusInfo();
+            //    if (requestInfo == null)
+            //    {
+            //        if (PatchExmRequestTime(args)) return;
+            //    }
 
-                if (requestInfo == null)
-                {
-                    return;
-                }
+            //    if (requestInfo == null)
+            //    {
+            //        return;
+            //    }
 
-                foreach (var patcher in Patchers)
-                {
-                    patcher.UpdateSession(args.Session, requestInfo);
-                }
-            }
-            catch (Exception ex)
-            {
-                //Log but ignore errors to avoid interrupting standard analytics
-                Log.Error("xGenerator PatchTracker failed.", ex);
-            }
+            //    foreach (var patcher in Patchers)
+            //    {
+            //        patcher.UpdateSession(args.Session, requestInfo);
+            //    }
+            //}
+            //catch (Exception ex)
+            //{
+            //    //Log but ignore errors to avoid interrupting standard analytics
+            //    Log.Error("xGenerator PatchTracker failed.", ex);
+            //}
         }
 
         private bool PatchExmRequestTime(InitializeTrackerArgs args)

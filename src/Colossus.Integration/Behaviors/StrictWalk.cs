@@ -24,23 +24,23 @@
         var outcomes = visitContext.Visit.GetVariable<IEnumerable<TriggerOutcomeData>>("TriggerOutcomes")?.ToArray();
         visitContext.Visit.Variables.Remove("TriggerOutcomes");
 
-        UploadContactPicture(visitContext.Visit.Variables);
+        //UploadContactPicture(visitContext.Visit.Variables);
 
-        for (var i = 0; i < this.pages.Count; i++)
-        {
-          var page = this.pages[i];
+        //for (var i = 0; i < this.pages.Count; i++)
+        //{
+        //  var page = this.pages[i];
 
-          if (outcomes != null && i == this.pages.Count - 2)
-          {
-            foreach (var oc in outcomes)
-            {
-              oc.DateTime = visitContext.Visit.End;
-            }
-            page.RequestVariables.Add("TriggerOutcomes", outcomes);
-          }
+        //  if (outcomes != null && i == this.pages.Count - 2)
+        //  {
+        //    foreach (var oc in outcomes)
+        //    {
+        //      oc.DateTime = visitContext.Visit.End;
+        //    }
+        //    page.RequestVariables.Add("TriggerOutcomes", outcomes);
+        //  }
 
-          visitContext.Request(page.Path.Replace("/sitecore/media library/", "/-/media/"), TimeSpan.FromSeconds(Randomness.Random.Next(10, 200)), page.RequestVariables);
-        }
+        //  visitContext.Request(page.Path.Replace("/sitecore/media library/", "/-/media/"), TimeSpan.FromSeconds(Randomness.Random.Next(10, 200)), page.RequestVariables);
+        //}
 
         yield return visitContext.Visit;
       }

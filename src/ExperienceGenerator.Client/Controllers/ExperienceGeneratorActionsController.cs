@@ -12,7 +12,6 @@ using ExperienceGenerator.Repositories;
 using Newtonsoft.Json.Linq;
 using Sitecore;
 using Sitecore.Analytics.Aggregation;
-using Sitecore.Analytics.Data.DataAccess.MongoDb;
 using Sitecore.Analytics.Data.Items;
 using Sitecore.Cintel.Configuration;
 using Sitecore.Configuration;
@@ -268,8 +267,8 @@ namespace ExperienceGenerator.Client.Controllers
         [HttpPost]
         public IHttpActionResult Flush()
         {
-            var driver = new MongoDbDriver(ConfigurationManager.ConnectionStrings["analytics"].ConnectionString);
-            driver.ResetDatabase();
+            //var driver = new MongoDbDriver(ConfigurationManager.ConnectionStrings["analytics"].ConnectionString);
+            //driver.ResetDatabase();
 
             var item = (Context.ContentDatabase ?? Context.Database).GetItem("/sitecore/media library/Images/xgen");
             item?.Delete();

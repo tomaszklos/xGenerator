@@ -4,10 +4,10 @@ using System.Linq;
 using Colossus.Web;
 using Sitecore;
 using Sitecore.Analytics;
-using Sitecore.Analytics.DataAccess;
 using Sitecore.Analytics.Model;
 using Sitecore.ContentTesting.Extensions;
 using Sitecore.Layouts;
+using Sitecore.Analytics.DataAccess;
 
 namespace Colossus.Integration.Models
 {
@@ -39,7 +39,8 @@ namespace Colossus.Integration.Models
             var info = new SitecoreResponseInfo
                        {
                            ContactId = Tracker.Current.Contact.TryGetValue(c => (Guid?) c.ContactId),
-                           VisitData = ((IUpdatableObject) Tracker.Current.Interaction).TryGetValue(i => i.GetParts().OfType<VisitData>().FirstOrDefault())
+
+                           //VisitData = ((IUpdatableObject) Tracker.Current.Interaction).TryGetValue(i => i.GetParts().OfType<VisitData>().FirstOrDefault())
                        };
 
 
